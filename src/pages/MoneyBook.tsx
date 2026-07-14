@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { SlideLayout } from "../components/SlideLayout";
 import { SlideTitle } from "../components/SlideTitle";
 import { SlidePageNumber } from "../components/SlidePageNumber";
@@ -7,21 +7,21 @@ import { TableOfContentsSlide } from "../components/TableOfContentsSlide";
 import { SlideSubtitle, SlideDate } from "../components/Typography";
 import { RandomDrawBoard } from "../components/RandomDrawBoard";
 
-interface MoneyBookProps {
-  onBack: () => void;
-}
+import { useNavigate, useSearch } from "@tanstack/react-router";
 
-export function MoneyBook({ onBack }: MoneyBookProps) {
-  const [currentSlide, setCurrentSlide] = useState(0);
+export function MoneyBook() {
+  const navigate = useNavigate({ from: '/money' });
+  const search = useSearch({ from: '/money' });
+  const currentSlide = search.slide;
   const totalSlides = 7;
 
-  const nextSlide = () => setCurrentSlide((prev) => Math.min(prev + 1, totalSlides - 1));
-  const prevSlide = () => setCurrentSlide((prev) => Math.max(prev - 1, 0));
+  const nextSlide = () => navigate({ search: { slide: Math.min(currentSlide + 1, totalSlides - 1) } });
+  const prevSlide = () => navigate({ search: { slide: Math.max(currentSlide - 1, 0) } });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        onBack();
+        navigate({ to: "/" });
       } else if (e.key === "ArrowRight" || e.key === " " || e.key === "ArrowDown") {
         nextSlide();
       } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
@@ -30,13 +30,13 @@ export function MoneyBook({ onBack }: MoneyBookProps) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onBack]);
+  }, [navigate, currentSlide, totalSlides]);
 
   return (
     <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-8 font-sans relative overflow-hidden">
       {/* Back Button (Top Left outside slide) */}
       <button 
-        onClick={onBack}
+        onClick={() => navigate({ to: "/" })}
         className="absolute top-8 left-8 w-12 h-12 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/20 text-white/50 hover:text-white backdrop-blur-sm transition-all z-50 cursor-pointer shadow-lg"
         title="뒤로 가기"
       >

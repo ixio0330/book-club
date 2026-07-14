@@ -1,19 +1,8 @@
-import { useState } from "react";
-import { MoneyBook } from "./pages/MoneyBook";
-import { DoItBook } from "./pages/DoItBook";
-
+import { useNavigate } from "@tanstack/react-router";
 import { BOOKS } from "./constants/books";
 
 function App() {
-  const [selectedBook, setSelectedBook] = useState<string | null>(null);
-
-  if (selectedBook === "money") {
-    return <MoneyBook onBack={() => setSelectedBook(null)} />;
-  }
-  
-  if (selectedBook === "doit") {
-    return <DoItBook onBack={() => setSelectedBook(null)} />;
-  }
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#f4efea] flex flex-col items-center justify-center p-8 font-sans text-black relative overflow-hidden">
@@ -35,7 +24,7 @@ function App() {
           {BOOKS.map((book) => (
             <div 
               key={book.id}
-              onClick={() => setSelectedBook(book.id)}
+              onClick={() => navigate({ to: `/${book.id}` })}
               className="relative cursor-pointer aspect-[2.3/3.5] mx-auto w-full max-w-[280px]"
             >
               {/* 실물 책 질감 & 그림자 */}

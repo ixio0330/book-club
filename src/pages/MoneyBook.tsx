@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { SlideLayout } from "../components/SlideLayout";
 import { SlideTitle } from "../components/SlideTitle";
 import { SlidePageNumber } from "../components/SlidePageNumber";
+import { ChapterSlide } from "../components/ChapterSlide";
+import { TableOfContentsSlide } from "../components/TableOfContentsSlide";
+import { SlideSubtitle, SlideDate } from "../components/Typography";
+import { RandomDrawBoard } from "../components/RandomDrawBoard";
 
 interface MoneyBookProps {
   onBack: () => void;
@@ -9,7 +13,7 @@ interface MoneyBookProps {
 
 export function MoneyBook({ onBack }: MoneyBookProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 1;
+  const totalSlides = 7;
 
   const nextSlide = () => setCurrentSlide((prev) => Math.min(prev + 1, totalSlides - 1));
   const prevSlide = () => setCurrentSlide((prev) => Math.max(prev - 1, 0));
@@ -63,7 +67,43 @@ export function MoneyBook({ onBack }: MoneyBookProps) {
 
         {currentSlide === 0 && (
           <SlideLayout variant="beige">
-            <SlideTitle>돈의 심리학</SlideTitle>
+            <SlideTitle>
+              도토리{"\n"}독서모임
+            </SlideTitle>
+            <SlideSubtitle>돈의 심리학</SlideSubtitle>
+            <SlideDate>2026년 7월 18일 (토) 12:00 ~ 14:00</SlideDate>
+          </SlideLayout>
+        )}
+
+        {currentSlide === 1 && (
+          <TableOfContentsSlide
+            items={[
+              "1. 근황토크",
+              "2. 랜덤 질문",
+              "3. 마무리"
+            ]}
+          />
+        )}
+
+        {currentSlide === 2 && (
+          <ChapterSlide title="근황토크" chapterNumber="01" />
+        )}
+
+        {currentSlide === 3 && (
+          <ChapterSlide title="랜덤 질문" chapterNumber="02" />
+        )}
+
+        {currentSlide === 4 && (
+          <RandomDrawBoard />
+        )}
+
+        {currentSlide === 5 && (
+          <ChapterSlide title="마무리" chapterNumber="03" />
+        )}
+
+        {currentSlide === 6 && (
+          <SlideLayout variant="beige">
+            <SlideTitle>감사합니다</SlideTitle>
           </SlideLayout>
         )}
       </div>

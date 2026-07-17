@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SlideLayout } from "./SlideLayout";
 import { MONEY_QUESTIONS } from "../constants/moneyQuestions";
 
@@ -10,6 +10,11 @@ export function RandomDrawBoard({ questions = MONEY_QUESTIONS }: RandomDrawBoard
   const [drawnNumbers, setDrawnNumbers] = useState<number[]>([]);
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
   const [showAllQuestions, setShowAllQuestions] = useState(false);
+  const [shuffledQuestions, setShuffledQuestions] = useState<string[]>([]);
+  
+  useEffect(() => {
+    setShuffledQuestions([...questions].sort(() => Math.random() - 0.5));
+  }, [questions]);
   
   const totalNumbers = questions.length;
   const numbers = Array.from({ length: totalNumbers }, (_, i) => i + 1);
@@ -47,7 +52,11 @@ export function RandomDrawBoard({ questions = MONEY_QUESTIONS }: RandomDrawBoard
             
             <div className="flex items-center gap-2 mt-4 md:mt-0">
               <button
-                onClick={() => { setDrawnNumbers([]); setSelectedNumber(null); }}
+                onClick={() => { 
+                  setDrawnNumbers([]); 
+                  setSelectedNumber(null); 
+                  setShuffledQuestions([...questions].sort(() => Math.random() - 0.5));
+                }}
                 disabled={drawnNumbers.length === 0}
                 className={`text-[13px] px-4 py-2 rounded-full font-bold transition-colors ${
                   drawnNumbers.length === 0
@@ -107,7 +116,7 @@ export function RandomDrawBoard({ questions = MONEY_QUESTIONS }: RandomDrawBoard
                 <div key={selectedNumber} className="animate-[fadeIn_0.5s_ease-out]">
                   <p className="text-sm text-neutral-400 font-extrabold mb-2 tracking-widest">QUESTION {String(selectedNumber).padStart(2, '0')}</p>
                   <p className="text-xl text-neutral-900 font-bold leading-relaxed break-keep">
-                    {questions[selectedNumber - 1]}
+                    {shuffledQuestions[selectedNumber - 1]}
                   </p>
                 </div>
               ) : (
